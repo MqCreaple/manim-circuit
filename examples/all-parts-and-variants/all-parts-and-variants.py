@@ -34,7 +34,7 @@ class AllPartsAndVariants(Scene):
 
         Opamp_variants = VGroup(
             Opamp(bias_supply="positive", label_positive=None, label_negative=None),
-            Opamp(bias_supply="negative", label_positive=None, label_negative=None),
+            Opamp(bias_supply="negative", invert_input=True, label_positive=None, label_negative=None),
             Opamp(bias_supply="both"),
         ).arrange(DOWN, buff=0.75)
 

@@ -257,6 +257,7 @@ class Opamp(VMobject):
     def __init__(
             self,
             bias_supply: Literal['positive', 'negative', 'both'] | None = None,
+            invert_input: bool = False,  # When inverted, the negative input is on top and positive input is at the bottom
             label_positive: str | None = r"V_{CC}",
             label_negative: str | None = r"-V_{CC}",
             pin_label_scale: float = 1.0,
@@ -280,13 +281,21 @@ class Opamp(VMobject):
         )
 
         # Indications for the input terminals
+        terminals = [
+            self.main_body.get_left() + [0, self.main_body.height / 4, 0],
+            self.main_body.get_left() - [0, self.main_body.height / 4, 0],
+        ]
+        if invert_input:
+            terminals.reverse()
+        # At this point, terminals[0] is positive input and terminals[1] is negative input
+
         self.main_body.add(
             VGroup(
                 Line(DOWN * 0.1, UP * 0.1), Line(LEFT * 0.1, RIGHT * 0.1)
             )
             .scale(pin_label_scale)
             .next_to(
-                self.main_body.get_left() + [0, self.main_body.height / 4, 0],
+                terminals[0],
                 RIGHT,
                 buff=0.1,
             )
@@ -295,7 +304,7 @@ class Opamp(VMobject):
             Line(LEFT * 0.1, RIGHT * 0.1)
             .scale(pin_label_scale)
             .next_to(
-                self.main_body.get_left() - [0, self.main_body.height / 4, 0],
+                terminals[1],
                 RIGHT,
                 buff=0.1,
             ),
@@ -305,24 +314,24 @@ class Opamp(VMobject):
         # Rails
         self._labels = VGroup()
         self._pos_rail = Line(
-            (self.main_body.get_left() + [0, self.main_body.height / 4, 0]),
-            (self.main_body.get_left() + [-0.25, self.main_body.height / 4, 0]),
+            terminals[0],
+            terminals[0] + [-0.25, 0, 0],
         )
 
         self._plots.add(
             Dot(
-                self.main_body.get_left() + [-0.25, self.main_body.height / 4, 0]
+                terminals[0] + [-0.25, 0, 0]
             ).set_opacity(0)
         )
         self._terminals["positive_input"] = self._plots[-1].get_center()
 
         self._neg_rail = Line(
-            (self.main_body.get_left() - [0, self.main_body.height / 4, 0]),
-            (self.main_body.get_left() - [0.25, self.main_body.height / 4, 0]),
+            terminals[1],
+            terminals[1] + [-0.25, 0, 0],
         )
         self._plots.add(
             Dot(
-                self.main_body.get_left() - [0.25, self.main_body.height / 4, 0]
+                terminals[1] + [-0.25, 0, 0]
             ).set_opacity(0)
         )
         self._terminals["negative_input"] = self._plots[-1].get_center()
