@@ -18,7 +18,7 @@ class AllPartsAndVariants(Scene):
             Capacitor(polarized=False),
         ).arrange(DOWN, buff=0.75)
 
-        resistor_variants = VGroup(Resistor(label="y"), Resistor()).arrange(
+        resistor_variants = VGroup(Resistor(label="y", standard="IEC"), Resistor(standard="ANSI")).arrange(
             DOWN, buff=0.75
         )
         inductor_variants = VGroup(Inductor(label="z"), Inductor()).arrange(
@@ -26,16 +26,16 @@ class AllPartsAndVariants(Scene):
         )
 
         source_variants = VGroup(
-            VoltageSource(value="V_1", label=True, direction=LEFT, dependent=False),
-            VoltageSource(value="V_2", label=True, direction=LEFT, dependent=True),
-            CurrentSource(value="I_1", label=True, direction=LEFT, dependent=False),
-            CurrentSource(value="I_2", label=True, direction=LEFT, dependent=True),
+            VoltageSource(value="V_1", direction=LEFT, dependent=False),
+            VoltageSource(value="V_2", direction=LEFT, dependent=True),
+            CurrentSource(value="I_1", direction=LEFT, dependent=False),
+            CurrentSource(value="I_2", direction=LEFT, dependent=True),
         ).arrange(DOWN, buff=0.75)
 
         Opamp_variants = VGroup(
-            Opamp(bias_supply="positive", label=False),
-            Opamp(bias_supply="negative", label=False),
-            Opamp(bias_supply="both", label=True),
+            Opamp(bias_supply="positive", label_positive=None, label_negative=None),
+            Opamp(bias_supply="negative", label_positive=None, label_negative=None),
+            Opamp(bias_supply="both"),
         ).arrange(DOWN, buff=0.75)
 
         all_electric_parts = VGroup(
